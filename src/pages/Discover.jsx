@@ -5,6 +5,11 @@ import { Error, Loader, SongCard } from "../components";
 import { selectGenreListId } from "../redux/features/playerSlice";
 import { useGetSongsByGenreQuery } from "../redux/services/shazamCore";
 import { genres } from "../assets/constants";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode } from "swiper";
+
+import "swiper/css";
+import "swiper/css/free-mode";
 
 const Discover = () => {
   const dispatch = useDispatch();
@@ -22,12 +27,32 @@ const Discover = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="w-full flex justify-between items-center sm:flex-row flex-col mt-4 mb-10">
+      <div className="w-full flex items-center sm:flex-row flex-col mt-4 mb-10">
         <h2 className="font-bold text-3xl text-white text-left">
-          Discover {genreTitle}
+          Discover {genreListId}
         </h2>
+        <Swiper
+          slidesPerView="auto"
+          spaceBetween={5}
+          freeMode
+          centeredSlides
+          centeredSlidesBounds
+          modules={[FreeMode]}
+          className="mt-4 mr-2"
+        >
+          {genres.map((genre) => (
+            <SwiperSlide
+              key={genre?.key}
+              style={{ width: "15%", height: "auto" }}
+              className="rounded-full animate-slideright mr-1 hover:bg-violet-600 bg-transparent text-white border-double border-4 border-sky-500 text-center"
+              onClick={(e) => dispatch(selectGenreListId(genre.value))}
+            >
+              {genre.title}
+            </SwiperSlide>
+          ))}
+        </Swiper>
 
-        <select
+        {/* <select
           onChange={(e) => dispatch(selectGenreListId(e.target.value))}
           value={genreListId || "pop"}
           className="bg-black text-gray-300 p-3 text-sm rounded-lg outline-none sm:mt-0 mt-5"
@@ -37,7 +62,7 @@ const Discover = () => {
               {genre.title}
             </option>
           ))}
-        </select>
+        </select> */}
       </div>
 
       <div className="flex flex-wrap sm:justify-start justify-center gap-8">
